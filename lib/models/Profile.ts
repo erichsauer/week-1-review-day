@@ -6,14 +6,14 @@ module.exports = class Profile {
   character;
   quote;
 
-  constructor({ id, name, character, quote }) {
+  constructor({ id, name, character, quote }: UserProfile) {
     this.id = id;
     this.name = name || 'friend';
     this.character = character || 'default character';
     this.quote = quote || 'default quote';
   }
 
-  static async insert({ name, character, quote }) {
+  static async insert({ name, character, quote }: UserProfile) {
     const {
       rows,
     } = await pool.query(
@@ -24,11 +24,11 @@ module.exports = class Profile {
     return new Profile(rows[0]);
   }
 
-  static async retrieve(id) {
+  static async retrieve(id: string) {
     if (!id) {
       const { rows } = await pool.query(`SELECT * FROM profiles`);
 
-      const profiles = rows.map((profile) => new Profile(profile));
+      const profiles = rows.map((profile: UserProfile) => new Profile(profile));
 
       return profiles;
     } else {
@@ -41,7 +41,7 @@ module.exports = class Profile {
     }
   }
 
-  static async updateById(id, { name, character, quote }) {
+  static async updateById(id: string, { name, character, quote }: UserProfile) {
     const {
       rows,
     } = await pool.query(
@@ -52,7 +52,7 @@ module.exports = class Profile {
     return new Profile(rows[0]);
   }
 
-  static async deleteById(id) {
+  static async deleteById(id: string) {
     const {
       rows,
     } = await pool.query(`DELETE FROM profiles WHERE id=$1 RETURNING *`, [id]);
